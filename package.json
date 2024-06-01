@@ -1,6 +1,6 @@
 {
-  "name": "template-electron-react-typescript",
-  "version": "0.1.0",
+  "name": "tetris",
+  "version": "1.0.0",
   "main": "build/electron/electron.js",
   "homepage": "./",
   "private": true,
