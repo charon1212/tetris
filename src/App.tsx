@@ -1,22 +1,9 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+type Props = {};
+export const App = (props: Props) => {
+  const {} = props;
   return (
-    <div className='App'>
-      <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
-        <button
-          onClick={() => {
-            console.log();
-            window.myAPI.callSample({ name: 'test' });
-          }}
-        >
-          Sample
-        </button>
-      </header>
-    </div>
+    <>
+      <div>Hello world</div>
+    </>
   );
-}
-
-export default App;
+};
