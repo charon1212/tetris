@@ -11,7 +11,14 @@ export const useTetrisBag = () => {
     setBag(addBag(newBag, bagSize));
     return picked!;
   };
-  return { bag, pickFromBag };
+  const resetBag = () => {
+    const newBag = addBag([], bagSize);
+    const picked = newBag.shift();
+    setBag(newBag);
+    return picked!;
+  };
+
+  return { bag, pickFromBag, resetBag };
 };
 
 /** バッグの中身がn個以上となるまで充填する。 */

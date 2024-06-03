@@ -14,7 +14,7 @@ export const TetrisGame = (props: Props) => {
   const {} = props;
   const [board, setBoard] = useState(initialTetrisBoard());
   const monoBoard = createMonoTetrisBoard(board);
-  const { bag, pickFromBag } = useTetrisBag();
+  const { bag, pickFromBag, resetBag } = useTetrisBag();
 
   const [mino, setMino] = useState<TetrominoType>('I');
   useEffect(() => {
@@ -57,6 +57,13 @@ export const TetrisGame = (props: Props) => {
     }
   };
 
+  const reset = () => {
+    const firstMino = resetBag();
+    setBoard(initialTetrisBoard());
+    setHold(null);
+    updateCursor(defaultCursor(firstMino));
+  };
+
   return (
     <>
       <TetrisHandleKeyinput
@@ -68,6 +75,7 @@ export const TetrisGame = (props: Props) => {
           z: () => updateCursor(tetrominoOperation.rotateLeft(monoBoard, cur)),
           x: () => updateCursor(tetrominoOperation.rotateRight(monoBoard, cur)),
           c: () => holdTetromino(),
+          r: () => reset(),
         }}
       >
         <div style={{ display: 'flex' }}>
