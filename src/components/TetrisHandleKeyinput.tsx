@@ -1,5 +1,3 @@
-import { useEffect, useRef, useState } from 'react';
-
 type KeyOperation = {
   arrowLeft?: () => void;
   arrowRight?: () => void;
@@ -15,7 +13,7 @@ export const TetrisHandleKeyinput = (props: Props) => {
 
   const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
     const operation = getOperation(e.key, keyOperation);
-    if (operation) operation.f();
+    operation?.();
   };
 
   return (
@@ -26,13 +24,13 @@ export const TetrisHandleKeyinput = (props: Props) => {
   );
 };
 
-const getOperation = (key: string, keyOperation: KeyOperation): { f: () => void; repeat: boolean } | undefined => {
+const getOperation = (key: string, keyOperation: KeyOperation): (() => void) | undefined => {
   key = key.toLowerCase();
-  if (key === 'arrowleft' && keyOperation.arrowLeft) return { f: keyOperation.arrowLeft, repeat: true };
-  if (key === 'arrowright' && keyOperation.arrowRight) return { f: keyOperation.arrowRight, repeat: true };
-  if (key === 'arrowup' && keyOperation.arrowUp) return { f: keyOperation.arrowUp, repeat: false };
-  if (key === 'arrowdown' && keyOperation.arrowDown) return { f: keyOperation.arrowDown, repeat: true };
-  if (key === 'z' && keyOperation.z) return { f: keyOperation.z, repeat: true };
-  if (key === 'x' && keyOperation.x) return { f: keyOperation.x, repeat: true };
-  if (key === 'c' && keyOperation.c) return { f: keyOperation.c, repeat: false };
+  if (key === 'arrowleft' && keyOperation.arrowLeft) return keyOperation.arrowLeft;
+  if (key === 'arrowright' && keyOperation.arrowRight) return keyOperation.arrowRight;
+  if (key === 'arrowup' && keyOperation.arrowUp) return keyOperation.arrowUp;
+  if (key === 'arrowdown' && keyOperation.arrowDown) return keyOperation.arrowDown;
+  if (key === 'z' && keyOperation.z) return keyOperation.z;
+  if (key === 'x' && keyOperation.x) return keyOperation.x;
+  if (key === 'c' && keyOperation.c) return keyOperation.c;
 };
