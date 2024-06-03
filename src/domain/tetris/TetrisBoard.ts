@@ -25,9 +25,11 @@ export const clearTetrisBoard = (board: TetrisBoard) => {
   const clearedBoard = cloneTetrisBoard(board);
   const dropedBoard = initialTetrisBoard();
   let clearCount = 0;
+  const clearRowIndex: number[] = [];
   let dropIndex = 0;
   for (let y = 0; y < BoardHeight; y++) {
     if (xarray.every((x) => board[x][y])) {
+      clearRowIndex.push(y);
       clearCount++;
       xarray.forEach((x) => clearedBoard[x][y] = '');
     } else {
@@ -35,7 +37,7 @@ export const clearTetrisBoard = (board: TetrisBoard) => {
       dropIndex++;
     }
   }
-  return { clearCount, clearedBoard, dropedBoard }
+  return { clearCount, clearedBoard, dropedBoard, clearRowIndex }
 };
 
 /** デバッグ出力用 */
