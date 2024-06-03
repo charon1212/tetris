@@ -23,7 +23,7 @@ export const TetrisBoardView = (props: Props) => {
   ghostCor.forEach(([x, y]) => {
     if (boardInside(x, y) && !colorBoard[x][y].backgroundColor) {
       colorBoard[x][y].backgroundColor = getColor(cursor.mino);
-      colorBoard[x][y].opacity = 0.5;
+      colorBoard[x][y].opacity = 0.3;
     }
   });
 
