@@ -5,8 +5,9 @@ import { TetrisHandleKeyinput } from './TetrisHandleKeyinput';
 import { TetrisBoardView } from './TetrisBoardView';
 import { tetrominoOperation } from '../domain/tetris/TetrominoOperation';
 import { useTetrisBag } from './useTetrisBag';
-import { TetrominoView } from './TetrominoView';
 import { TetrominoType } from '../domain/tetris/Tetromino';
+import { NextView } from './NextView';
+import { HoldView } from './HoldView';
 
 type Props = {};
 export const TetrisGame = (props: Props) => {
@@ -23,6 +24,8 @@ export const TetrisGame = (props: Props) => {
   const [y, setY] = useState(18);
   const [rotate, setRotate] = useState<TetrominoRotate>('T');
   const cur: TetrisCursor = { mino, x, y, rotate };
+
+  const [hold, setHold] = useState<TetrominoType | null>(null);
 
   const updateCursor = (cursor: TetrisCursor) => {
     setMino(cursor.mino);
@@ -43,6 +46,17 @@ export const TetrisGame = (props: Props) => {
     updateCursor(defaultCursor(next));
   };
 
+  const holdTetromino = () => {
+    if (hold === null) {
+      setHold(mino);
+      const next = pickFromBag();
+      updateCursor(defaultCursor(next));
+    } else {
+      setHold(mino);
+      updateCursor(defaultCursor(hold));
+    }
+  };
+
   return (
     <>
       <TetrisHandleKeyinput
@@ -50,28 +64,23 @@ export const TetrisGame = (props: Props) => {
           arrowLeft: () => updateCursor(tetrominoOperation.moveLeft(monoBoard, cur)),
           arrowRight: () => updateCursor(tetrominoOperation.moveRight(monoBoard, cur)),
           arrowDown: () => updateCursor(tetrominoOperation.moveDown(monoBoard, cur)),
+          arrowUp: () => drop(),
           z: () => updateCursor(tetrominoOperation.rotateLeft(monoBoard, cur)),
           x: () => updateCursor(tetrominoOperation.rotateRight(monoBoard, cur)),
-          arrowUp: () => drop(),
+          c: () => holdTetromino(),
         }}
       >
         <div style={{ display: 'flex' }}>
           <div style={{ margin: '10px' }}>
-            <div></div>
             <div>
-              <TetrominoView size={10} mino={bag[0]} />
+              <HoldView hold={hold} />
             </div>
           </div>
           <div style={{ margin: '10px' }}>
             <TetrisBoardView board={board} cursor={cur} />
           </div>
           <div style={{ margin: '10px' }}>
-            <div>
-              <TetrominoView size={10} mino={bag[0]} />
-              <TetrominoView size={10} mino={bag[1]} />
-              <TetrominoView size={10} mino={bag[2]} />
-              <TetrominoView size={10} mino={bag[3]} />
-            </div>
+            <NextView bag={bag} showNext={5} />
           </div>
         </div>
       </TetrisHandleKeyinput>
