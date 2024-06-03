@@ -4,21 +4,25 @@ import { TetrominoType } from '../domain/tetris/Tetromino';
 const bagSize = 20;
 export const useTetrisBag = () => {
   const [bag, setBag] = useState<TetrominoType[]>(addBag([], bagSize));
+  const [indexMino, setIndexMino] = useState(-1);
 
   const pickFromBag = () => {
     const newBag = [...bag];
     const picked = newBag.shift();
     setBag(addBag(newBag, bagSize));
+    console.log(indexMino);
+    setIndexMino(indexMino + 1);
     return picked!;
   };
   const resetBag = () => {
     const newBag = addBag([], bagSize);
     const picked = newBag.shift();
     setBag(newBag);
+    setIndexMino(0);
     return picked!;
   };
 
-  return { bag, pickFromBag, resetBag };
+  return { bag, pickFromBag, resetBag, indexMino };
 };
 
 /** バッグの中身がn個以上となるまで充填する。 */
