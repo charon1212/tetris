@@ -40,3 +40,6 @@ export const calcDropCandidate = (board: MonoTetrisBoard, mino: TetrominoType) =
   }
   return dropCandidateList;
 };
+
+/** ある盤面で、あるミノの置き方（カーソル）が実現可能であることを確認する。 */
+export const isPossibleCursor = (board: MonoTetrisBoard, cursor: TetrisCursor) => calcDropCandidate(board, cursor.mino).some(({ dc }) => equalCursor(dc.cursor, cursor));
