@@ -68,8 +68,8 @@ const TetrisBoardViewCell = ({ cell }: { cell: Cell }) => {
   if (ghost) return <div style={{ height: '20px', width: '20px', border: '1px solid black', backgroundColor: getColor(ghost), opacity: 0.3 }}></div>;
   if (assist)
     return (
-      <div style={{ height: '20px', width: '20px', border: '1px solid black' }}>
-        <div style={{ height: '15px', width: '15px', border: `2px dashed ${getColor(assist)}` }}></div>
+      <div style={{ height: '20px', width: '20px', border: '1px solid black', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ height: '6px', width: '6px', border: `3px inset ${getColor(assist)}` }}></div>
       </div>
     );
   return <div style={{ height: '20px', width: '20px', border: '1px solid black' }}></div>;
