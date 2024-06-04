@@ -2,6 +2,7 @@ import { MonoTetrisBoard } from "../TetrisBoard";
 import { TetrisCursor, defaultCursor, getTetrisCor } from "../TetrisCursor";
 import { TetrominoType } from "../Tetromino";
 import { TetrominoOperation, tetrominoOperation } from "../TetrominoOperation";
+import { equalCor, equalCursor } from "../util";
 
 type DropCandidateMove =
   | 'ml' // move left
@@ -39,6 +40,3 @@ export const calcDropCandidate = (board: MonoTetrisBoard, mino: TetrominoType) =
   }
   return dropCandidateList;
 };
-
-const equalCursor = (c1: TetrisCursor, c2: TetrisCursor) => c1.x === c2.x && c1.y === c2.y && c1.rotate === c2.rotate;
-const equalCor = (c1: [x: number, y: number][], c2: [x: number, y: number][]) => c1.every(([x1, y1]) => c2.some(([x2, y2]) => x1 === x2 && y1 === y2));
