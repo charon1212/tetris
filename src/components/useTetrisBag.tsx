@@ -10,7 +10,6 @@ export const useTetrisBag = () => {
     const newBag = [...bag];
     const picked = newBag.shift();
     setBag(addBag(newBag, bagSize));
-    console.log(indexMino);
     setIndexMino(indexMino + 1);
     return picked!;
   };
