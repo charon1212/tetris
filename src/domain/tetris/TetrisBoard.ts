@@ -46,8 +46,3 @@ export const debugTetrisBoard = (board: TetrisBoard, title?: string) => {
   const text = yarray.toReversed().map((y) => xarray.map((x) => board[x][y] || '.').join('')).join('\n');
   console.log(text);
 };
-
-/** 色情報なしのテトリスの盤面 */
-export type MonoTetrisBoard = boolean[][];
-export const createMonoTetrisBoard = (board: TetrisBoard) => board.map((v) => v.map((cell) => cell !== ''));
-

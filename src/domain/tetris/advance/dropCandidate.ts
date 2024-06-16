@@ -1,5 +1,5 @@
-import { MonoTetrisBoard } from "../TetrisBoard";
-import { TetrisCursor, defaultCursor, getTetrisCor } from "../TetrisCursor";
+import { TetrisBoard, } from "../TetrisBoard";
+import { TetrisCursor, getDefaultCursor, getTetrisCor } from "../TetrisCursor";
 import { TetrominoType } from "../Tetromino";
 import { TetrominoOperation, tetrominoOperation } from "../TetrominoOperation";
 import { equalCor, equalCursor } from "../util";
@@ -11,16 +11,33 @@ type DropCandidateMove =
   | 'rl' // rotate left
   | 'rr'; // rotate right
 export type DropCandidate = { cursor: TetrisCursor, moves: DropCandidateMove[], };
-const operations: { ope: TetrominoOperation, move: DropCandidateMove }[] = [
-  { ope: tetrominoOperation.moveLeft, move: 'ml', },
-  { ope: tetrominoOperation.moveRight, move: 'mr', },
-  { ope: tetrominoOperation.moveDown, move: 'md', },
-  { ope: tetrominoOperation.rotateLeft, move: 'rl', },
-  { ope: tetrominoOperation.rotateRight, move: 'rr', },
-];
 
-export const calcDropCandidate = (board: MonoTetrisBoard, mino: TetrominoType) => {
-  const array: { cursor: TetrisCursor, moves: DropCandidateMove[] }[] = [{ cursor: defaultCursor(mino), moves: [] }];
+/** ハードドロップのみでおけるパターンを探索する */
+export const calcHardDropCandidate = (board: TetrisBoard, mino: TetrominoType) => {
+  return calcDropCandidateInner(board, mino, [
+    { ope: tetrominoOperation.moveLeft, move: 'ml', },
+    { ope: tetrominoOperation.moveRight, move: 'mr', },
+    // { ope: tetrominoOperation.moveDown, move: 'md', },  ハードドロップのみにするため、ソフドロを削除。
+    { ope: tetrominoOperation.rotateLeft, move: 'rl', },
+    { ope: tetrominoOperation.rotateRight, move: 'rr', },
+  ]);
+};
+
+export const calcDropCandidate = (board: TetrisBoard, mino: TetrominoType) => {
+  return calcDropCandidateInner(board, mino, [
+    { ope: tetrominoOperation.moveLeft, move: 'ml', },
+    { ope: tetrominoOperation.moveRight, move: 'mr', },
+    { ope: tetrominoOperation.moveDown, move: 'md', },
+    { ope: tetrominoOperation.rotateLeft, move: 'rl', },
+    { ope: tetrominoOperation.rotateRight, move: 'rr', },
+  ]);
+};
+
+/** ある盤面で、あるミノの置き方（カーソル）が実現可能であることを確認する。 */
+export const isPossibleCursor = (board: TetrisBoard, cursor: TetrisCursor) => calcDropCandidate(board, cursor.mino).some(({ dc }) => equalCursor(dc.cursor, cursor));
+
+const calcDropCandidateInner = (board: TetrisBoard, mino: TetrominoType, operations: { ope: TetrominoOperation, move: DropCandidateMove }[],): { dc: DropCandidate, cashCor: [x: number, y: number][] }[] => {
+  const array: { cursor: TetrisCursor, moves: DropCandidateMove[] }[] = [{ cursor: getDefaultCursor(mino), moves: [] }];
   const searched: TetrisCursor[] = [];
   const dropCandidateList: { dc: DropCandidate, cashCor: [x: number, y: number][] }[] = [];
   while (array.length > 0) {
@@ -40,6 +57,3 @@ export const calcDropCandidate = (board: MonoTetrisBoard, mino: TetrominoType) =
   }
   return dropCandidateList;
 };
-
-/** ある盤面で、あるミノの置き方（カーソル）が実現可能であることを確認する。 */
-export const isPossibleCursor = (board: MonoTetrisBoard, cursor: TetrisCursor) => calcDropCandidate(board, cursor.mino).some(({ dc }) => equalCursor(dc.cursor, cursor));

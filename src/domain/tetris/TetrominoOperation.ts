@@ -1,8 +1,8 @@
-import { MonoTetrisBoard, boardInside } from "./TetrisBoard";
+import { TetrisBoard, boardInside } from "./TetrisBoard";
 import { TetrisCursor, TetrominoRotate, getTetrisCor, rotateDefinition } from "./TetrisCursor";
 import { TetrominoType } from "./Tetromino";
 
-export type TetrominoOperation = (board: MonoTetrisBoard, cur: TetrisCursor) => TetrisCursor;
+export type TetrominoOperation = (board: TetrisBoard, cur: TetrisCursor) => TetrisCursor;
 
 /** テトリミノを1つ左に移動する */
 const moveLeft: TetrominoOperation = (board, cur) => examNewCursor(board, { ...cur, x: cur.x - 1 }) ?? cur;
@@ -26,7 +26,7 @@ export const tetrominoOperation = { moveLeft, moveRight, moveDown, dropDown, rot
  * ある盤面で、カーソルをテストする。
  * @returns カーソルがOKな場合（有効な移動である）、カーソルを返却する。そうでない場合、undefinedを返却する。
  */
-const examNewCursor = (board: MonoTetrisBoard, newCursor: TetrisCursor): TetrisCursor | undefined => {
+const examNewCursor = (board: TetrisBoard, newCursor: TetrisCursor): TetrisCursor | undefined => {
   return getTetrisCor(newCursor).some(([x, y]) => !boardInside(x, y) || board[x][y]) ? undefined : newCursor;
 };
 
@@ -38,7 +38,7 @@ const examNewCursor = (board: MonoTetrisBoard, newCursor: TetrisCursor): TetrisC
  * @param rotateRight 右回転の場合はtrue、左回転の場合はfalse
  * @returns SRSの範囲で回転可能な場合、その回転後のカーソル。回転不可の場合、undefined。
  */
-const srs = (board: MonoTetrisBoard, cursor: TetrisCursor, rotateRight: boolean): TetrisCursor | undefined => {
+const srs = (board: TetrisBoard, cursor: TetrisCursor, rotateRight: boolean): TetrisCursor | undefined => {
 
   if (cursor.mino === 'O') return cursor; // 回転が起こらないOミノは考えないこととする。
 

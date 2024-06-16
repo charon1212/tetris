@@ -7,7 +7,7 @@ export type TetrisCursor = {
   x: number;
   y: number;
 };
-export const defaultCursor = (mino: TetrominoType): TetrisCursor => ({ mino, rotate: 'T', x: 4, y: 18 });
+export const getDefaultCursor = (mino: TetrominoType): TetrisCursor => ({ mino, rotate: 'T', x: 4, y: 18 });
 export type TetrominoRotate = 'T' | 'R' | 'D' | 'L';
 export const rotateDefinition: { [key in TetrominoRotate]: { left: TetrominoRotate, right: TetrominoRotate } } = {
   T: { left: 'L', right: 'R' },

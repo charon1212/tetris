@@ -1,4 +1,4 @@
-import { TetrisBoard, TetrisBoardCell, boardInside, createMonoTetrisBoard } from '../domain/tetris/TetrisBoard';
+import { TetrisBoard, TetrisBoardCell, boardInside } from '../domain/tetris/TetrisBoard';
 import { TetrisCursor, getTetrisCor } from '../domain/tetris/TetrisCursor';
 import { TetrominoType, getTetrominoDefinition } from '../domain/tetris/Tetromino';
 import { tetrominoOperation } from '../domain/tetris/TetrominoOperation';
@@ -12,7 +12,7 @@ export const TetrisBoardView = (props: Props) => {
   const { board, cursor, assist } = props;
 
   const currentCor = getTetrisCor(cursor);
-  const ghostCor = getTetrisCor(tetrominoOperation.dropDown(createMonoTetrisBoard(board), cursor));
+  const ghostCor = getTetrisCor(tetrominoOperation.dropDown(board, cursor));
   const colorBoard: { backgroundColor: string; opacity: number }[][] = board.map((_, x) =>
     board[0].map((__, y) => ({ backgroundColor: getColor(board[x][y]), opacity: 1 }))
   );

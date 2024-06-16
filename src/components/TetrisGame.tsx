@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { clearTetrisBoard, createMonoTetrisBoard, initialTetrisBoard, putTetromino } from '../domain/tetris/TetrisBoard';
-import { TetrisCursor, TetrominoRotate, defaultCursor } from '../domain/tetris/TetrisCursor';
+import { clearTetrisBoard, initialTetrisBoard, putTetromino } from '../domain/tetris/TetrisBoard';
+import { TetrisCursor, TetrominoRotate, getDefaultCursor } from '../domain/tetris/TetrisCursor';
 import { TetrisHandleKeyinput } from './TetrisHandleKeyinput';
 import { TetrisBoardView } from './TetrisBoardView';
 import { tetrominoOperation } from '../domain/tetris/TetrominoOperation';
@@ -16,12 +16,11 @@ type Props = {};
 export const TetrisGame = (props: Props) => {
   const {} = props;
   const [board, setBoard] = useState(initialTetrisBoard());
-  const monoBoard = createMonoTetrisBoard(board);
   const { bag, pickFromBag, resetBag, indexMino } = useTetrisBag();
 
   const [mino, setMino] = useState<TetrominoType>('I');
   useEffect(() => {
-    updateCursor(defaultCursor(pickFromBag()));
+    updateCursor(getDefaultCursor(pickFromBag()));
   }, []);
   const [x, setX] = useState(4);
   const [y, setY] = useState(18);
@@ -38,7 +37,7 @@ export const TetrisGame = (props: Props) => {
   };
 
   const drop = () => {
-    const dropedCursor = tetrominoOperation.dropDown(monoBoard, cur);
+    const dropedCursor = tetrominoOperation.dropDown(board, cur);
     setDebugCursorList([...debugCursorList, { ...dropedCursor }]);
     // board 更新
     const newBoard = putTetromino(board, dropedCursor);
@@ -47,17 +46,17 @@ export const TetrisGame = (props: Props) => {
     // next 更新
     const next = pickFromBag();
     // cursor 更新
-    updateCursor(defaultCursor(next));
+    updateCursor(getDefaultCursor(next));
   };
 
   const holdTetromino = () => {
     if (hold === null) {
       setHold(mino);
       const next = pickFromBag();
-      updateCursor(defaultCursor(next));
+      updateCursor(getDefaultCursor(next));
     } else {
       setHold(mino);
-      updateCursor(defaultCursor(hold));
+      updateCursor(getDefaultCursor(hold));
     }
   };
 
@@ -65,7 +64,7 @@ export const TetrisGame = (props: Props) => {
     const firstMino = resetBag();
     setBoard(initialTetrisBoard());
     setHold(null);
-    updateCursor(defaultCursor(firstMino));
+    updateCursor(getDefaultCursor(firstMino));
     setDebugCursorList([]);
   };
 
@@ -81,18 +80,18 @@ export const TetrisGame = (props: Props) => {
         setConstruction(createProcedureCorArray(initialTetrisBoard(), procedure));
       }
     }
-  }, [indexMino]);
+  }, [indexMino, mino, bag, hold]);
 
   return (
     <>
       <TetrisHandleKeyinput
         keyOperation={{
-          arrowLeft: () => updateCursor(tetrominoOperation.moveLeft(monoBoard, cur)),
-          arrowRight: () => updateCursor(tetrominoOperation.moveRight(monoBoard, cur)),
-          arrowDown: () => updateCursor(tetrominoOperation.moveDown(monoBoard, cur)),
+          arrowLeft: () => updateCursor(tetrominoOperation.moveLeft(board, cur)),
+          arrowRight: () => updateCursor(tetrominoOperation.moveRight(board, cur)),
+          arrowDown: () => updateCursor(tetrominoOperation.moveDown(board, cur)),
           arrowUp: () => drop(),
-          z: () => updateCursor(tetrominoOperation.rotateLeft(monoBoard, cur)),
-          x: () => updateCursor(tetrominoOperation.rotateRight(monoBoard, cur)),
+          z: () => updateCursor(tetrominoOperation.rotateLeft(board, cur)),
+          x: () => updateCursor(tetrominoOperation.rotateRight(board, cur)),
           c: () => holdTetromino(),
           r: () => reset(),
         }}
@@ -112,7 +111,7 @@ export const TetrisGame = (props: Props) => {
             <NextView bag={bag} showNext={5} />
           </div>
           <div>
-            <button onClick={() => console.log(calcDropCandidate(createMonoTetrisBoard(board), cur.mino))}>test</button>
+            <button onClick={() => console.log(calcDropCandidate(board, cur.mino))}>test</button>
             <button onClick={() => console.log(JSON.stringify(debugCursorList))}>test2</button>
           </div>
           <div>{construction ? JSON.stringify(construction) : ''}</div>
