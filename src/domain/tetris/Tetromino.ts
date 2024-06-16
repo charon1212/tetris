@@ -1,4 +1,5 @@
 export type TetrominoType = 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L';
+export const getAllTetromino = (): TetrominoType[] => ['I', 'O', 'T', 'S', 'Z', 'J', 'L'];
 export const isTetrominoType = (t: any): t is TetrominoType => ['I', 'O', 'T', 'S', 'Z', 'J', 'L'].includes(t);
 
 /**
