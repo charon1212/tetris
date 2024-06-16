@@ -9,8 +9,10 @@ import { TetrominoType } from '../domain/tetris/Tetromino';
 import { NextView } from './NextView';
 import { HoldView } from './HoldView';
 import { calcDropCandidate } from '../domain/tetris/advance/dropCandidate';
-import { template__hachimitsu } from '../domain/tetris/template/hachimitsu';
+import { template__hachimitsu } from '../domain/tetris/template/hachimitsu_old';
 import { createProcedureCorArray } from '../domain/tetris/advance/TetrisProcedure';
+import { searchTetrisTemplate } from '../domain/tetris/template/searchTetrisTemplate';
+import { templateHachimitsuLeft1, templateHachimitsuLeft2A } from '../domain/tetris/template/hachimitsu';
 
 type Props = {};
 export const TetrisGame = (props: Props) => {
@@ -82,6 +84,18 @@ export const TetrisGame = (props: Props) => {
     }
   }, [indexMino, mino, bag, hold]);
 
+  useEffect(() => {
+    const templates = [templateHachimitsuLeft1, templateHachimitsuLeft2A];
+    templates.forEach((template) => {
+      const searchResult = searchTetrisTemplate(template, board, mino, hold, bag, indexMino);
+      if (searchResult) {
+        console.log({ name: template.name, result: searchResult.process.map((v) => (v.procedure === 'hold' ? 'hold' : v.procedure.mino)) });
+      } else {
+        console.log({ name: template.name, result: 'undefined' });
+      }
+    });
+  }, [board]);
+
   return (
     <>
       <TetrisHandleKeyinput
@@ -117,6 +131,13 @@ export const TetrisGame = (props: Props) => {
           <div>{construction ? JSON.stringify(construction) : ''}</div>
         </div>
       </TetrisHandleKeyinput>
+      <button
+        onClick={() => {
+          console.log(searchTetrisTemplate(templateHachimitsuLeft1, board, mino, hold, bag, indexMino));
+        }}
+      >
+        searchProcedure_DEBUG001
+      </button>
     </>
   );
 };
